@@ -1,0 +1,6 @@
+Queries
+
+(professor's name) office (returns office)
+(professor's name) courses (returns courses)
+(course name) room (returns room)
+(course CRN) room (returns room)
