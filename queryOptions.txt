@@ -1,6 +1,9 @@
 Queries
 
-(professor's name) office (returns office)
-(professor's name) courses (returns courses)
-(course name) room (returns room)
-(course CRN) room (returns room)
+office (professor's last name) (returns office)
+courses (professor's last name) (returns courses)
+title (professor's last name) (returns title)
+room (course name) (returns room)
+room (course CRN) (returns room)
+enrollment (course name) (returns enrollment)
+enrollment (course CRN) (returns enrollment)
