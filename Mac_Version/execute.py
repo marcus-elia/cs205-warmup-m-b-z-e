@@ -29,6 +29,20 @@ def insert_row1(con, entities):
     cursorObj = con.cursor()
     cursorObj.execute('''INSERT OR REPLACE INTO course(name, crn, registered, location, cprofessor) VALUES(?,?,?,?,?)''', entities)
     con.commit()
+    
+def helper():
+    print("Here is the help menu for the search engine \n")
+    print("To use this software first enter what data you would like to know, ex. office/class \n")
+    print("Next, enter the value you know, ex. professor \n")
+    print("Then print the specific data you want to find, ex. Eddy \n")
+    print("The professor name needs to be the last name with a capital \n")
+    print("For course names and room names it is the whole course with capitals, unlike the abbreviations seen on the registrar \n")
+    print("For course names please enter the full name of the course without the prefix (such as QR) \n")
+    print("Here is an example \n")
+    print("To find the office of professor Eddy you would enter the commands as follows \n")
+    print("office professor Eddy \n")
+    print("This will return the office of professor Eddy")
+    print("To get help, type help \n")
 
 def read_file(con):
     f = open("professors.csv")
