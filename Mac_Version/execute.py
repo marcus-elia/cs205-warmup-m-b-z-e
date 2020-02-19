@@ -78,11 +78,26 @@ def executeSQL():
     run = input("Would you like to try out our engine? Enter y or n: ")
     while run == 'y' or run == 'Y':
         user_input = input("Enter your command here: ")
-        a,b,c = user_input.split(',')
-        a = a.strip()
-        b = b.strip()
-        c = c.strip()
-        results = commandSQL(a, b, c)
+        if user_input != "load" and user_input != "help":
+            a,b,c = user_input.split(',')
+            a = a.strip()
+            b = b.strip()
+            c = c.strip()
+            results = commandSQL(a, b, c)
+        else:
+            if user_input == "load":
+                cursorObj = con.cursor()
+                cursorObj.execute('SELECT * FROM course')
+                rows = cursorObj.fetchall()
+                cursorObj.execute('SELECT * FROM professor')
+                rs = cursorObj.fetchall()
+                for row in rows:
+                    print(row)
+                for r in rs:
+                    print(r)
+            elif user_input == "help":
+                helper()
+        
         while results == 1:
             user_input = input("That command is invalid, please try another command or type n to quit: ")
             if user_input == 'n' or user_input == 'N':
