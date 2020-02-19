@@ -59,6 +59,13 @@ def greeding():
         executeSQL()
     except ValueError:
         print("Please follow the format from 1 of 8 commands, and please use commas between your commands!")
+        con = sql_connect()
+        cursorObj = con.cursor()
+        cursorObj.execute('''PRAGMA foreign_keys = OFF;''')
+        cursorObj.execute('''DROP TABLE professor;''')
+        cursorObj.execute('''UPDATE course SET cprofessor = NULL;''')
+        cursorObj.execute('''DROP TABLE course;''')
+        cursorObj.execute('''PRAGMA foreign_keys = ON;''')
         subprocess.call("rm test7.db", shell=True)
 
 def executeSQL():
@@ -78,6 +85,12 @@ def executeSQL():
             user_input = input("Command is not included, please try another command or type n to end: ")
             if user_input == 'n':
                 print("Goodbye!")
+                cursorObj = con.cursor()
+                cursorObj.execute('''PRAGMA foreign_keys = OFF;''')
+                cursorObj.execute('''DROP TABLE professor;''')
+                cursorObj.execute('''UPDATE course SET cprofessor = NULL;''')
+                cursorObj.execute('''DROP TABLE course;''')
+                cursorObj.execute('''PRAGMA foreign_keys = ON;''')
                 subprocess.call("rm test7.db", shell=True)
                 exit()
             else:
@@ -93,6 +106,12 @@ def executeSQL():
             print("The query you search does not exist! Please try with other values.")
         run = input("Would you like to try out our engine with different or the same commands again? Enter y or n (lowercase): ")
     print("Goodbye!")
+    cursorObj = con.cursor()
+    cursorObj.execute('''PRAGMA foreign_keys = OFF;''')
+    cursorObj.execute('''DROP TABLE professor;''')
+    cursorObj.execute('''UPDATE course SET cprofessor = NULL;''')
+    cursorObj.execute('''DROP TABLE course;''')
+    cursorObj.execute('''PRAGMA foreign_keys = ON;''')
     subprocess.call("rm test7.db", shell=True)
 
 def inputTable():
