@@ -48,7 +48,7 @@ def read_file(con):
 def greeting():
     print("Welcome to the UVM CS professor and course search engine for Spring 2020!")
     print("Please use the following format for search commands:")
-    print("\t 1. office, Professor, professor's name. Example: office, professor, Eddy")
+    print("\t 1. office, professor, professor's name. Example: office, professor, Eddy")
     print("\t 2. office, title, title's name.         Example: office, title, Lecturer")
     print("\t 3. course, professor, professor's name. Example: course, professor, Erickson")
     print("\t 4. title, professor, professor's name.  Example: title, professor, Horton")
@@ -75,7 +75,7 @@ def executeSQL():
     read_file(con)
     inputTable()
     run = input("Would you like to try out our engine? Enter y or n: ")
-    while run == 'y' || run == 'Y':
+    while run == 'y' or run == 'Y':
         user_input = input("Enter your command here: ")
         a,b,c = user_input.split(',')
         a = a.strip()
@@ -102,7 +102,7 @@ def executeSQL():
                 results = commandSQL(a, b, c)
         if results:
             for result in results:
-                print(result)
+                print(result[0])
         else:
             print("That value you are searching for does not exist. Please try a different value.")
         run = input("Would you like to search again? Enter y or n: ")
