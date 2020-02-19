@@ -67,7 +67,6 @@ def greeting():
         cursorObj.execute('''UPDATE course SET cprofessor = NULL;''')
         cursorObj.execute('''DROP TABLE course;''')
         cursorObj.execute('''PRAGMA foreign_keys = ON;''')
-        subprocess.call("rm test7.db", shell=True)
         subprocess.call("del test7.db", shell=True)
 
 def executeSQL():
@@ -93,7 +92,6 @@ def executeSQL():
                 cursorObj.execute('''UPDATE course SET cprofessor = NULL;''')
                 cursorObj.execute('''DROP TABLE course;''')
                 cursorObj.execute('''PRAGMA foreign_keys = ON;''')
-                subprocess.call("rm test7.db", shell=True)
                 subprocess.call("del test7.db", shell=True)
                 exit()
             else:
@@ -115,7 +113,6 @@ def executeSQL():
     cursorObj.execute('''UPDATE course SET cprofessor = NULL;''')
     cursorObj.execute('''DROP TABLE course;''')
     cursorObj.execute('''PRAGMA foreign_keys = ON;''')
-    subprocess.call("rm test7.db", shell=True)
     subprocess.call("del test7.db", shell=True)
 
 def inputTable():
