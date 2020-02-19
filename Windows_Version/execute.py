@@ -16,18 +16,18 @@ def sql_connect():
 
 def sql_table(con):
     cursorObj = con.cursor()
-    cursorObj.execute("CREATE TABLE professor(professorN varchar(15) PRIMARY KEY, office varchar(15), title varchar(20))")
-    cursorObj.execute("CREATE TABLE course(name varchar(30), crn INTEGER, registered INTEGER, location varchar(15), cprofessor varchar(15), FOREIGN KEY(cprofessor) REFERENCES professor(professorN))")
+    cursorObj.execute("CREATE TABLE IF NOT EXISTS professor(professorN varchar(15) PRIMARY KEY, office varchar(15), title varchar(20))")
+    cursorObj.execute("CREATE TABLE IF NOT EXISTS course(name varchar(30), crn INTEGER, registered INTEGER, location varchar(15), cprofessor varchar(15), FOREIGN KEY(cprofessor) REFERENCES professor(professorN))")
     con.commit()
 
 def insert_row(con, entities):
     cursorObj = con.cursor()
-    cursorObj.execute('''INSERT INTO professor(professorN, office, title) VALUES(?,?,?)''', entities)
+    cursorObj.execute('''INSERT OR REPLACE INTO professor(professorN, office, title) VALUES(?,?,?)''', entities)
     con.commit()
 
 def insert_row1(con, entities):
     cursorObj = con.cursor()
-    cursorObj.execute('''INSERT INTO course(name, crn, registered, location, cprofessor) VALUES(?,?,?,?,?)''', entities)
+    cursorObj.execute('''INSERT OR REPLACE INTO course(name, crn, registered, location, cprofessor) VALUES(?,?,?,?,?)''', entities)
     con.commit()
 
 def read_file(con):
@@ -118,7 +118,7 @@ def executeSQL():
 def inputTable():
     con = sqlite3.connect('test7.db')
     cursorObj = con.cursor()
-    cursorObj.execute("CREATE TABLE search(number INTEGER, pName varchar(15), poffice varchar(15), ptitle varchar(20))")
+    cursorObj.execute("CREATE TABLE IF NOT EXISTS search(number INTEGER, pName varchar(15), poffice varchar(15), ptitle varchar(20))")
     con.commit()
 
 # a is what it asked (like office or class, etc.)
