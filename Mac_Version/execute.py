@@ -48,7 +48,6 @@ def helper():
     print("\t 6. room, CRN, CRN number.               Example: room, CRN, 10747")
     print("\t 7. enrollment, course, course's name.   Example: enrollment, course, Intro to Web Site Dev")
     print("\t 8. enrollment, CRN, CRN number.         Example: enrollment, CRN, 10747")
-    print("To get help, type help \n")
 
 def read_file(con):
     f = open("professors.csv")
@@ -125,11 +124,11 @@ def executeSQL():
     inputTable()
     run = input("Would you like to try out our engine? Enter y or n: ")
     while run == 'y' or run == 'Y':
-        user_input = input("Enter your command here: ")
+        user_input = input("Enter your command here, or enter help for help: ")
         results = commandHelper(user_input)
         
         while results == 1:
-            user_input = input("That command is invalid, please try another command or type n to quit: ")
+            user_input = input("That command is invalid, please try another command, or type help, or type n to quit: ")
             if user_input == 'n' or user_input == 'N':
                 print("Goodbye!")
                 con = sqlite3.connect('test7.db')
@@ -160,7 +159,9 @@ def executeSQL():
             print()
         else:
             print("That value you are searching for does not exist. Please try a different value.")
-        run = input("Would you like to search again? Enter y or n: ")
+        run = 1
+        while not run in ('y', 'Y', 'n', 'N'):
+            run = input("Would you like to search again? Enter y or n: ")
     print("Goodbye!")
     con = sqlite3.connect('test7.db')
     cursorObj = con.cursor()
