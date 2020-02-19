@@ -1,5 +1,6 @@
 # cited sources: https://likegeeks.com/python-sqlite3-tutorial/
 # cited sources: https://www.pythonforbeginners.com/dictionary/python-split
+# cited sources: https://www.sqlitetutorial.net/sqlite-drop-table/
 import sqlite3
 from sqlite3 import Error
 import sys
