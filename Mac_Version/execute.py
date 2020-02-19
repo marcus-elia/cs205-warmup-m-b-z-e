@@ -1,6 +1,7 @@
 # cited sources: https://likegeeks.com/python-sqlite3-tutorial/
 # cited sources: https://www.pythonforbeginners.com/dictionary/python-split
 # cited sources: https://www.sqlitetutorial.net/sqlite-drop-table/
+# cited sources: https://pyformat.info/
 import sqlite3
 from sqlite3 import Error
 import sys
@@ -75,14 +76,42 @@ def greeting():
         executeSQL()
     except ValueError:
         print("Please follow the format from 1 of 8 command types, and please use commas between the entries.")
-        con = sql_connect()
+        con = sqlite3.connect('test7.db')
         cursorObj = con.cursor()
-        cursorObj.execute('''PRAGMA foreign_keys = OFF;''')
-        cursorObj.execute('''DROP TABLE professor;''')
-        cursorObj.execute('''UPDATE course SET cprofessor = NULL;''')
-        cursorObj.execute('''DROP TABLE course;''')
-        cursorObj.execute('''PRAGMA foreign_keys = ON;''')
+        cursorObj.execute('PRAGMA foreign_keys = OFF')
+        cursorObj.execute('DROP TABLE IF EXISTS professor')
+        cursorObj.execute('UPDATE course SET cprofessor = NULL')
+        cursorObj.execute('DROP TABLE IF EXISTS course')
+        cursorObj.execute('PRAGMA foreign_keys = ON')
+        con.commit()
+        con.close()
         subprocess.call("rm test7.db", shell=True)
+
+
+def commandHelper(c):
+    con = sql_connect()
+    if c != "load" and c != "help":
+            a,b,c = c.split(',')
+            a = a.strip()
+            b = b.strip()
+            c = c.strip()
+            results_ = commandSQL(a, b, c)
+    else:
+        if c == "load":
+            cursorObj = con.cursor()
+            cursorObj.execute('SELECT * FROM course')
+            rows = cursorObj.fetchall()
+            cursorObj.execute('SELECT * FROM professor')
+            rs = cursorObj.fetchall()
+            for row in rows:
+                print(row)
+            for r in rs:
+                print(r)
+            results_ = 0
+        elif c == "help":
+            helper()
+            results_ = 0
+    return results_
 
 def executeSQL():
     con = sql_connect()
@@ -92,36 +121,21 @@ def executeSQL():
     run = input("Would you like to try out our engine? Enter y or n: ")
     while run == 'y' or run == 'Y':
         user_input = input("Enter your command here: ")
-        if user_input != "load" and user_input != "help":
-            a,b,c = user_input.split(',')
-            a = a.strip()
-            b = b.strip()
-            c = c.strip()
-            results = commandSQL(a, b, c)
-        else:
-            if user_input == "load":
-                cursorObj = con.cursor()
-                cursorObj.execute('SELECT * FROM course')
-                rows = cursorObj.fetchall()
-                cursorObj.execute('SELECT * FROM professor')
-                rs = cursorObj.fetchall()
-                for row in rows:
-                    print(row)
-                for r in rs:
-                    print(r)
-            elif user_input == "help":
-                helper()
+        results = commandHelper(user_input)
         
         while results == 1:
             user_input = input("That command is invalid, please try another command or type n to quit: ")
             if user_input == 'n' or user_input == 'N':
                 print("Goodbye!")
+                con = sqlite3.connect('test7.db')
                 cursorObj = con.cursor()
-                cursorObj.execute('''PRAGMA foreign_keys = OFF;''')
-                cursorObj.execute('''DROP TABLE professor;''')
-                cursorObj.execute('''UPDATE course SET cprofessor = NULL;''')
-                cursorObj.execute('''DROP TABLE course;''')
-                cursorObj.execute('''PRAGMA foreign_keys = ON;''')
+                cursorObj.execute('PRAGMA foreign_keys = OFF')
+                cursorObj.execute('DROP TABLE IF EXISTS professor')
+                cursorObj.execute('UPDATE course SET cprofessor = NULL')
+                cursorObj.execute('DROP TABLE IF EXISTS course')
+                cursorObj.execute('PRAGMA foreign_keys = ON')
+                con.commit()
+                con.close()
                 subprocess.call("rm test7.db", shell=True)
                 exit()
             else:
@@ -132,17 +146,26 @@ def executeSQL():
                 results = commandSQL(a, b, c)
         if results:
             for result in results:
-                print(result[0])
+                if result[1] is None:
+                    print(result[0])
+                else:
+                    print('{:<20}'.format(result[0]) + '{:<20}'.format(result[1]))
+                
+        elif results == 0:
+            print()
         else:
             print("That value you are searching for does not exist. Please try a different value.")
         run = input("Would you like to search again? Enter y or n: ")
     print("Goodbye!")
+    con = sqlite3.connect('test7.db')
     cursorObj = con.cursor()
-    cursorObj.execute('''PRAGMA foreign_keys = OFF;''')
-    cursorObj.execute('''DROP TABLE professor;''')
-    cursorObj.execute('''UPDATE course SET cprofessor = NULL;''')
-    cursorObj.execute('''DROP TABLE course;''')
-    cursorObj.execute('''PRAGMA foreign_keys = ON;''')
+    cursorObj.execute('PRAGMA foreign_keys = OFF')
+    cursorObj.execute('DROP TABLE IF EXISTS professor')
+    cursorObj.execute('UPDATE course SET cprofessor = NULL')
+    cursorObj.execute('DROP TABLE IF EXISTS course')
+    cursorObj.execute('PRAGMA foreign_keys = ON')
+    con.commit()
+    con.close()
     subprocess.call("rm test7.db", shell=True)
 
 def inputTable():
@@ -159,7 +182,16 @@ def commandSQL(a, b, c):
     con = sqlite3.connect('test7.db')
     cursorObj = con.cursor()
     # office professor professor's name
-    if (a == "office"):
+    if (a == "office professor"):
+        if (b == "title"):
+            entities = ('NULL', 'NULL', 'NULL', c)
+            cursorObj.execute('''INSERT INTO search(number, pName, poffice, ptitle) VALUES(?,?,?,?)''', entities)
+            cursorObj.execute('''SELECT p.professorN, p.office From professor AS p INNER JOIN search AS s on p.title = s.ptitle''')
+            outputs = cursorObj.fetchall()
+            cursorObj.execute('DELETE FROM search')
+            con.commit()
+            return outputs
+    elif (a == "office"):
         if (b == "professor"):
             entities = ('NULL', c, 'NULL', 'NULL')
             cursorObj.execute('''INSERT INTO search(number, pName, poffice, ptitle) VALUES(?,?,?,?)''', entities)

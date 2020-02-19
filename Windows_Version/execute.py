@@ -44,6 +44,21 @@ def read_file(con):
         e = e.rstrip()
         entities1 = (a, b, c, d, e)
         insert_row1(con, entities1)
+    f1.close()
+
+def helper():
+    print("Here is the help menu for the search engine \n")
+    print("To use this software first enter what data you would like to know, ex. office/class \n")
+    print("Next, enter the value you know, ex. professor \n")
+    print("Then print the specific data you want to find, ex. Eddy \n")
+    print("The professor name needs to be the last name with a capital \n")
+    print("For course names and room names it is the whole course with capitals, unlike the abbreviations seen on the registrar \n")
+    print("For course names please enter the full name of the course without the prefix (such as QR) \n")
+    print("Here is an example \n")
+    print("To find the office of professor Eddy you would enter the commands as follows \n")
+    print("office professor Eddy \n")
+    print("This will return the office of professor Eddy")
+    print("To get help, type help \n")
 
 def greeting():
     print("Welcome to the UVM CS professor and course search engine for Spring 2020!")
@@ -60,14 +75,40 @@ def greeting():
         executeSQL()
     except ValueError:
         print("Please follow the format from 1 of 8 command types, and please use commas between the entries.")
-        con = sql_connect()
+        con = sqlite3.connect('test7.db')
         cursorObj = con.cursor()
-        cursorObj.execute('''PRAGMA foreign_keys = OFF;''')
-        cursorObj.execute('''DROP TABLE professor;''')
-        cursorObj.execute('''UPDATE course SET cprofessor = NULL;''')
-        cursorObj.execute('''DROP TABLE course;''')
-        cursorObj.execute('''PRAGMA foreign_keys = ON;''')
-        subprocess.call("del test7.db", shell=True)
+        cursorObj.execute('PRAGMA foreign_keys = OFF')
+        cursorObj.execute('DROP table IF EXISTS professor')
+        cursorObj.execute('UPDATE course SET cprofessor = NULL')
+        cursorObj.execute('DROP table IF EXISTS course')
+        cursorObj.execute('PRAGMA foreign_keys = ON')
+        con.commit()
+        con.close()
+
+def commandHelper(c):
+    con = sql_connect()
+    if c != "load" and c != "help":
+            a,b,c = c.split(',')
+            a = a.strip()
+            b = b.strip()
+            c = c.strip()
+            results_ = commandSQL(a, b, c)
+    else:
+        if c == "load":
+            cursorObj = con.cursor()
+            cursorObj.execute('SELECT * FROM course')
+            rows = cursorObj.fetchall()
+            cursorObj.execute('SELECT * FROM professor')
+            rs = cursorObj.fetchall()
+            for row in rows:
+                print(row)
+            for r in rs:
+                print(r)
+            results_ = 0
+        elif c == "help":
+            helper()
+            results_ = 0
+    return results_
 
 def executeSQL():
     con = sql_connect()
@@ -77,22 +118,21 @@ def executeSQL():
     run = input("Would you like to try out our engine? Enter y or n: ")
     while run == 'y' or run == 'Y':
         user_input = input("Enter your command here: ")
-        a,b,c = user_input.split(',')
-        a = a.strip()
-        b = b.strip()
-        c = c.strip()
-        results = commandSQL(a, b, c)
+        results = commandHelper(user_input)
+        
         while results == 1:
             user_input = input("That command is invalid, please try another command or type n to quit: ")
             if user_input == 'n' or user_input == 'N':
                 print("Goodbye!")
+                con = sqlite3.connect('test7.db')
                 cursorObj = con.cursor()
-                cursorObj.execute('''PRAGMA foreign_keys = OFF;''')
-                cursorObj.execute('''DROP TABLE professor;''')
-                cursorObj.execute('''UPDATE course SET cprofessor = NULL;''')
-                cursorObj.execute('''DROP TABLE course;''')
-                cursorObj.execute('''PRAGMA foreign_keys = ON;''')
-                subprocess.call("del test7.db", shell=True)
+                cursorObj.execute('PRAGMA foreign_keys = OFF')
+                cursorObj.execute('DROP TABLE IF EXISTS professor')
+                cursorObj.execute('UPDATE course SET cprofessor = NULL')
+                cursorObj.execute('DROP TABLE IF EXISTS course')
+                cursorObj.execute('PRAGMA foreign_keys = ON')
+                con.commit()
+                con.close()
                 exit()
             else:
                 a,b,c = user_input.split(',')
@@ -103,17 +143,21 @@ def executeSQL():
         if results:
             for result in results:
                 print(result[0])
+        elif results == 0:
+            print()
         else:
             print("That value you are searching for does not exist. Please try a different value.")
         run = input("Would you like to search again? Enter y or n: ")
     print("Goodbye!")
+    con = sqlite3.connect('test7.db')
     cursorObj = con.cursor()
-    cursorObj.execute('''PRAGMA foreign_keys = OFF;''')
-    cursorObj.execute('''DROP TABLE professor;''')
-    cursorObj.execute('''UPDATE course SET cprofessor = NULL;''')
-    cursorObj.execute('''DROP TABLE course;''')
-    cursorObj.execute('''PRAGMA foreign_keys = ON;''')
-    subprocess.call("del test7.db", shell=True)
+    cursorObj.execute('PRAGMA foreign_keys = OFF')
+    cursorObj.execute('DROP TABLE IF EXISTS professor''')
+    cursorObj.execute('UPDATE course SET cprofessor = NULL')
+    cursorObj.execute('DROP TABLE IF EXISTS course''')
+    cursorObj.execute('PRAGMA foreign_keys = ON''')
+    con.commit()
+    con.close()
 
 def inputTable():
     con = sqlite3.connect('test7.db')
