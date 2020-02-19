@@ -45,21 +45,21 @@ def read_file(con):
         entities1 = (a, b, c, d, e)
         insert_row1(con, entities1)
 
-def greeding():
-    print("Welcome to professor course searching engine!")
-    print("Please try following commands for search:")
+def greeting():
+    print("Welcome to the UVM CS professor and course search engine for Spring 2020!")
+    print("Please use the following format for search commands:")
     print("\t 1. office, Professor, professor's name. Example: office, professor, Eddy")
-    print("\t 2. office, title, title's name. Example: office, title, Professor")
+    print("\t 2. office, title, title's name.         Example: office, title, Lecturer")
     print("\t 3. course, professor, professor's name. Example: course, professor, Erickson")
-    print("\t 4. title, professor, professor's name. Example: title, professor, Horton")
-    print("\t 5. room, course, course's name Example: room, course, Intro to Web Site Dev")
-    print("\t 6. room, CRN, CRN number. Example: room, CRN, 10747")
-    print("\t 7. enrollment, course, course's name. Example: enrollment, course, Intro to Web Site Dev")
-    print("\t 8. enrollment, CRN, CRN number. Example: enrollment, CRN, 10747")
+    print("\t 4. title, professor, professor's name.  Example: title, professor, Horton")
+    print("\t 5. room, course, course's name.         Example: room, course, Intro to Web Site Dev")
+    print("\t 6. room, CRN, CRN number.               Example: room, CRN, 10747")
+    print("\t 7. enrollment, course, course's name.   Example: enrollment, course, Intro to Web Site Dev")
+    print("\t 8. enrollment, CRN, CRN number.         Example: enrollment, CRN, 10747")
     try:
         executeSQL()
     except ValueError:
-        print("Please follow the format from 1 of 8 commands, and please use commas between your commands!")
+        print("Please follow the format from 1 of 8 command types, and please use commas between the entries.")
         con = sql_connect()
         cursorObj = con.cursor()
         cursorObj.execute('''PRAGMA foreign_keys = OFF;''')
@@ -74,17 +74,17 @@ def executeSQL():
     sql_table(con)
     read_file(con)
     inputTable()
-    run = input("Would you like to try out our engine? Enter y or n (lowercase): ")
-    while run == 'y':
-        user_input = input("Please type in the command: ")
+    run = input("Would you like to try out our engine? Enter y or n: ")
+    while run == 'y' || run == 'Y':
+        user_input = input("Enter your command here: ")
         a,b,c = user_input.split(',')
         a = a.strip()
         b = b.strip()
         c = c.strip()
         results = commandSQL(a, b, c)
         while results == 1:
-            user_input = input("Command is not included, please try another command or type n to end: ")
-            if user_input == 'n':
+            user_input = input("That command is invalid, please try another command or type n to quit: ")
+            if user_input == 'n' or user_input == 'N':
                 print("Goodbye!")
                 cursorObj = con.cursor()
                 cursorObj.execute('''PRAGMA foreign_keys = OFF;''')
@@ -104,8 +104,8 @@ def executeSQL():
             for result in results:
                 print(result)
         else:
-            print("The query you search does not exist! Please try with other values.")
-        run = input("Would you like to try out our engine with different or the same commands again? Enter y or n (lowercase): ")
+            print("That value you are searching for does not exist. Please try a different value.")
+        run = input("Would you like to search again? Enter y or n: ")
     print("Goodbye!")
     cursorObj = con.cursor()
     cursorObj.execute('''PRAGMA foreign_keys = OFF;''')
@@ -205,4 +205,4 @@ def commandSQL(a, b, c):
     else:
         return 1
 
-greeding()
+greeting()
