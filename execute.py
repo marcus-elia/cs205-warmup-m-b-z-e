@@ -68,6 +68,7 @@ def greeding():
         cursorObj.execute('''DROP TABLE course;''')
         cursorObj.execute('''PRAGMA foreign_keys = ON;''')
         subprocess.call("rm test7.db", shell=True)
+        subprocess.call("del test7.db", shell=True)
 
 def executeSQL():
     con = sql_connect()
@@ -93,6 +94,7 @@ def executeSQL():
                 cursorObj.execute('''DROP TABLE course;''')
                 cursorObj.execute('''PRAGMA foreign_keys = ON;''')
                 subprocess.call("rm test7.db", shell=True)
+                subprocess.call("del test7.db", shell=True)
                 exit()
             else:
                 a,b,c = user_input.split(',')
@@ -114,6 +116,7 @@ def executeSQL():
     cursorObj.execute('''DROP TABLE course;''')
     cursorObj.execute('''PRAGMA foreign_keys = ON;''')
     subprocess.call("rm test7.db", shell=True)
+    subprocess.call("del test7.db", shell=True)
 
 def inputTable():
     con = sqlite3.connect('test7.db')
