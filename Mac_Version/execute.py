@@ -122,7 +122,9 @@ def executeSQL():
     sql_table(con)
     read_file(con)
     inputTable()
-    run = input("Would you like to try out our engine? Enter y or n: ")
+    run = 1
+    while not run in ('y', 'Y', 'x', 'X'):
+        run = input("Would you like to try out our engine? Enter y or n: ")
     while run == 'y' or run == 'Y':
         user_input = input("Enter your command here, or enter help for help, or enter 'load data' to load the data: ")
         results = commandHelper(user_input)
