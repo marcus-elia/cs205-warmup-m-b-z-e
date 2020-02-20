@@ -79,17 +79,20 @@ def greeting():
     try:
         executeSQL()
     except ValueError:
+        print("Error! Invalid format.")
         print("Please follow the format from 1 of 8 command types, and please use commas between the entries.")
-        con = sqlite3.connect('test7.db')
-        cursorObj = con.cursor()
-        cursorObj.execute('PRAGMA foreign_keys = OFF')
-        cursorObj.execute('DROP TABLE IF EXISTS professor')
-        cursorObj.execute('UPDATE course SET cprofessor = NULL')
-        cursorObj.execute('DROP TABLE IF EXISTS course')
-        cursorObj.execute('PRAGMA foreign_keys = ON')
-        con.commit()
-        con.close()
-        subprocess.call("rm test7.db", shell=True)
+        print("Restarting.")
+        #con = sqlite3.connect('test7.db')
+        #cursorObj = con.cursor()
+        #cursorObj.execute('PRAGMA foreign_keys = OFF')
+        #cursorObj.execute('DROP TABLE IF EXISTS professor')
+        #cursorObj.execute('UPDATE course SET cprofessor = NULL')
+        #cursorObj.execute('DROP TABLE IF EXISTS course')
+        #cursorObj.execute('PRAGMA foreign_keys = ON')
+        #con.commit()
+        #con.close()
+        #subprocess.call("rm test7.db", shell=True)
+        greeting()
 
 
 def commandHelper(c):
