@@ -91,14 +91,14 @@ def greeting():
 
 def commandHelper(c):
     con = sql_connect()
-    if c != "load" and c != "help":
+    if c != "load data" and c != "help":
             a,b,c = c.split(',')
             a = a.strip()
             b = b.strip()
             c = c.strip()
             results_ = commandSQL(a, b, c)
     else:
-        if c == "load":
+        if c == "load data":
             cursorObj = con.cursor()
             cursorObj.execute('SELECT * FROM course')
             rows = cursorObj.fetchall()
@@ -121,11 +121,11 @@ def executeSQL():
     inputTable()
     run = input("Would you like to try out our engine? Enter y or n: ")
     while run == 'y' or run == 'Y':
-        user_input = input("Enter your command here, or enter help for help: ")
+        user_input = input("Enter your command here, or enter help for help, or enter 'load data' to load the data: ")
         results = commandHelper(user_input)
         
         while results == 1:
-            user_input = input("That command is invalid, please try another command, or type help, or type n to quit: ")
+            user_input = input("That command is invalid, please try another command, or type help or 'load data', or type n to quit: ")
             if user_input == 'n' or user_input == 'N':
                 print("Goodbye!")
                 con = sqlite3.connect('test7.db')
