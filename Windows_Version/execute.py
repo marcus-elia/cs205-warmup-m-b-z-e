@@ -78,16 +78,19 @@ def greeting():
     try:
         executeSQL()
     except ValueError:
+        print("Error! Invalid format")
         print("Please follow the format from 1 of 8 command types, and please use commas between the entries.")
-        con = sqlite3.connect('test7.db')
-        cursorObj = con.cursor()
-        cursorObj.execute('PRAGMA foreign_keys = OFF')
-        cursorObj.execute('DROP table IF EXISTS professor')
-        cursorObj.execute('UPDATE course SET cprofessor = NULL')
-        cursorObj.execute('DROP table IF EXISTS course')
-        cursorObj.execute('PRAGMA foreign_keys = ON')
-        con.commit()
-        con.close()
+        print("Restarting.")
+        #con = sqlite3.connect('test7.db')
+        #cursorObj = con.cursor()
+        #cursorObj.execute('PRAGMA foreign_keys = OFF')
+        #cursorObj.execute('DROP table IF EXISTS professor')
+        #cursorObj.execute('UPDATE course SET cprofessor = NULL')
+        #cursorObj.execute('DROP table IF EXISTS course')
+        #cursorObj.execute('PRAGMA foreign_keys = ON')
+        #con.commit()
+        #con.close()
+        greeting()
 
 def commandHelper(c):
     con = sql_connect()
@@ -120,7 +123,7 @@ def executeSQL():
     read_file(con)
     inputTable()
     run = 1
-    while not run in ('y', 'Y', 'x', 'X'):
+    while not run in ('y', 'Y', 'n', 'N'):
         run = input("Would you like to try out our engine? Enter y or n: ")
     while run == 'y' or run == 'Y':
         user_input = input("Enter your command here, or enter help for help, or enter 'load data' to load the data: ")
