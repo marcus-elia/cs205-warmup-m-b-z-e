@@ -54,11 +54,15 @@ def helper():
     print("The professor name needs to be the last name with a capital \n")
     print("For course names and room names it is the whole course with capitals, unlike the abbreviations seen on the registrar \n")
     print("For course names please enter the full name of the course without the prefix (such as QR) \n")
-    print("Here is an example \n")
-    print("To find the office of professor Eddy you would enter the commands as follows \n")
-    print("office professor Eddy \n")
-    print("This will return the office of professor Eddy")
-    print("To get help, type help \n")
+    print("Here are the valid formats:")
+    print("\t 1. office, professor, professor's name. Example: office, professor, Eddy")
+    print("\t 2. office, title, title's name.         Example: office, title, Lecturer")
+    print("\t 3. course, professor, professor's name. Example: course, professor, Erickson")
+    print("\t 4. title, professor, professor's name.  Example: title, professor, Horton")
+    print("\t 5. room, course, course's name.         Example: room, course, Intro to Web Site Dev")
+    print("\t 6. room, CRN, CRN number.               Example: room, CRN, 10747")
+    print("\t 7. enrollment, course, course's name.   Example: enrollment, course, Intro to Web Site Dev")
+    print("\t 8. enrollment, CRN, CRN number.         Example: enrollment, CRN, 10747")
 
 def greeting():
     print("Welcome to the UVM CS professor and course search engine for Spring 2020!")
@@ -74,27 +78,30 @@ def greeting():
     try:
         executeSQL()
     except ValueError:
+        print("Error! Invalid format")
         print("Please follow the format from 1 of 8 command types, and please use commas between the entries.")
-        con = sqlite3.connect('test7.db')
-        cursorObj = con.cursor()
-        cursorObj.execute('PRAGMA foreign_keys = OFF')
-        cursorObj.execute('DROP table IF EXISTS professor')
-        cursorObj.execute('UPDATE course SET cprofessor = NULL')
-        cursorObj.execute('DROP table IF EXISTS course')
-        cursorObj.execute('PRAGMA foreign_keys = ON')
-        con.commit()
-        con.close()
+        print("Restarting.")
+        #con = sqlite3.connect('test7.db')
+        #cursorObj = con.cursor()
+        #cursorObj.execute('PRAGMA foreign_keys = OFF')
+        #cursorObj.execute('DROP table IF EXISTS professor')
+        #cursorObj.execute('UPDATE course SET cprofessor = NULL')
+        #cursorObj.execute('DROP table IF EXISTS course')
+        #cursorObj.execute('PRAGMA foreign_keys = ON')
+        #con.commit()
+        #con.close()
+        greeting()
 
 def commandHelper(c):
     con = sql_connect()
-    if c != "load" and c != "help":
+    if c != "load data" and c != "help":
             a,b,c = c.split(',')
             a = a.strip()
             b = b.strip()
             c = c.strip()
             results_ = commandSQL(a, b, c)
     else:
-        if c == "load":
+        if c == "load data":
             cursorObj = con.cursor()
             cursorObj.execute('SELECT * FROM course')
             rows = cursorObj.fetchall()
@@ -115,13 +122,15 @@ def executeSQL():
     sql_table(con)
     read_file(con)
     inputTable()
-    run = input("Would you like to try out our engine? Enter y or n: ")
+    run = 1
+    while not run in ('y', 'Y', 'n', 'N'):
+        run = input("Would you like to try out our engine? Enter y or n: ")
     while run == 'y' or run == 'Y':
-        user_input = input("Enter your command here: ")
+        user_input = input("Enter your command here, or enter help for help, or enter 'load data' to load the data: ")
         results = commandHelper(user_input)
         
         while results == 1:
-            user_input = input("That command is invalid, please try another command or type n to quit: ")
+            user_input = input("That command is invalid, please try another command, or type help or 'load data', or type n to quit: ")
             if user_input == 'n' or user_input == 'N':
                 print("Goodbye!")
                 con = sqlite3.connect('test7.db')
@@ -147,7 +156,9 @@ def executeSQL():
             print()
         else:
             print("That value you are searching for does not exist. Please try a different value.")
-        run = input("Would you like to search again? Enter y or n: ")
+        run = 1
+        while not run in ('y', 'Y', 'n', 'N'):
+            run = input("Would you like to search again? Enter y or n: ")
     print("Goodbye!")
     con = sqlite3.connect('test7.db')
     cursorObj = con.cursor()
