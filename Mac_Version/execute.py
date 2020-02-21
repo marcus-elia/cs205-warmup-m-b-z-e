@@ -146,11 +146,7 @@ def executeSQL():
                 results = commandSQL(a, b, c)
         if results:
             for result in results:
-                if result[1] is None:
-                    print(result[0])
-                else:
-                    print('{:<20}'.format(result[0]) + '{:<20}'.format(result[1]))
-                
+                    print(result[0])                
         elif results == 0:
             print()
         else:
@@ -182,16 +178,7 @@ def commandSQL(a, b, c):
     con = sqlite3.connect('test7.db')
     cursorObj = con.cursor()
     # office professor professor's name
-    if (a == "office professor"):
-        if (b == "title"):
-            entities = ('NULL', 'NULL', 'NULL', c)
-            cursorObj.execute('''INSERT INTO search(number, pName, poffice, ptitle) VALUES(?,?,?,?)''', entities)
-            cursorObj.execute('''SELECT p.professorN, p.office From professor AS p INNER JOIN search AS s on p.title = s.ptitle''')
-            outputs = cursorObj.fetchall()
-            cursorObj.execute('DELETE FROM search')
-            con.commit()
-            return outputs
-    elif (a == "office"):
+    if (a == "office"):
         if (b == "professor"):
             entities = ('NULL', c, 'NULL', 'NULL')
             cursorObj.execute('''INSERT INTO search(number, pName, poffice, ptitle) VALUES(?,?,?,?)''', entities)
